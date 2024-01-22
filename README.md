@@ -1,6 +1,6 @@
-# goservice
+# go-session
 
-Go gRPC service
+Go Session gRPC Service
 
 ### Requirements
 - [go 1.21](https://go.dev/dl)

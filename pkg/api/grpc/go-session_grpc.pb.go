@@ -22,7 +22,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GoSessionClient interface {
-	ServiceMethod(ctx context.Context, in *ServiceMethodRequest, opts ...grpc.CallOption) (*ServiceMethodResponse, error)
+	CreateSession(ctx context.Context, in *CreateSessionRequest, opts ...grpc.CallOption) (*CreateSessionResponse, error)
+	DeleteSession(ctx context.Context, in *DeleteSessionRequest, opts ...grpc.CallOption) (*DeleteSessionResponse, error)
+	FlushSessions(ctx context.Context, in *FlushSessionsRequest, opts ...grpc.CallOption) (*FlushSessionsResponse, error)
+	ExtractSession(ctx context.Context, in *ExtractSessionRequest, opts ...grpc.CallOption) (*ExtractSessionResponse, error)
 }
 
 type goSessionClient struct {
@@ -33,9 +36,36 @@ func NewGoSessionClient(cc grpc.ClientConnInterface) GoSessionClient {
 	return &goSessionClient{cc}
 }
 
-func (c *goSessionClient) ServiceMethod(ctx context.Context, in *ServiceMethodRequest, opts ...grpc.CallOption) (*ServiceMethodResponse, error) {
-	out := new(ServiceMethodResponse)
-	err := c.cc.Invoke(ctx, "/go.session.GoSession/ServiceMethod", in, out, opts...)
+func (c *goSessionClient) CreateSession(ctx context.Context, in *CreateSessionRequest, opts ...grpc.CallOption) (*CreateSessionResponse, error) {
+	out := new(CreateSessionResponse)
+	err := c.cc.Invoke(ctx, "/go.session.GoSession/CreateSession", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *goSessionClient) DeleteSession(ctx context.Context, in *DeleteSessionRequest, opts ...grpc.CallOption) (*DeleteSessionResponse, error) {
+	out := new(DeleteSessionResponse)
+	err := c.cc.Invoke(ctx, "/go.session.GoSession/DeleteSession", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *goSessionClient) FlushSessions(ctx context.Context, in *FlushSessionsRequest, opts ...grpc.CallOption) (*FlushSessionsResponse, error) {
+	out := new(FlushSessionsResponse)
+	err := c.cc.Invoke(ctx, "/go.session.GoSession/FlushSessions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *goSessionClient) ExtractSession(ctx context.Context, in *ExtractSessionRequest, opts ...grpc.CallOption) (*ExtractSessionResponse, error) {
+	out := new(ExtractSessionResponse)
+	err := c.cc.Invoke(ctx, "/go.session.GoSession/ExtractSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +76,10 @@ func (c *goSessionClient) ServiceMethod(ctx context.Context, in *ServiceMethodRe
 // All implementations must embed UnimplementedGoSessionServer
 // for forward compatibility
 type GoSessionServer interface {
-	ServiceMethod(context.Context, *ServiceMethodRequest) (*ServiceMethodResponse, error)
+	CreateSession(context.Context, *CreateSessionRequest) (*CreateSessionResponse, error)
+	DeleteSession(context.Context, *DeleteSessionRequest) (*DeleteSessionResponse, error)
+	FlushSessions(context.Context, *FlushSessionsRequest) (*FlushSessionsResponse, error)
+	ExtractSession(context.Context, *ExtractSessionRequest) (*ExtractSessionResponse, error)
 	mustEmbedUnimplementedGoSessionServer()
 }
 
@@ -54,8 +87,17 @@ type GoSessionServer interface {
 type UnimplementedGoSessionServer struct {
 }
 
-func (UnimplementedGoSessionServer) ServiceMethod(context.Context, *ServiceMethodRequest) (*ServiceMethodResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ServiceMethod not implemented")
+func (UnimplementedGoSessionServer) CreateSession(context.Context, *CreateSessionRequest) (*CreateSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSession not implemented")
+}
+func (UnimplementedGoSessionServer) DeleteSession(context.Context, *DeleteSessionRequest) (*DeleteSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSession not implemented")
+}
+func (UnimplementedGoSessionServer) FlushSessions(context.Context, *FlushSessionsRequest) (*FlushSessionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FlushSessions not implemented")
+}
+func (UnimplementedGoSessionServer) ExtractSession(context.Context, *ExtractSessionRequest) (*ExtractSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExtractSession not implemented")
 }
 func (UnimplementedGoSessionServer) mustEmbedUnimplementedGoSessionServer() {}
 
@@ -70,20 +112,74 @@ func RegisterGoSessionServer(s grpc.ServiceRegistrar, srv GoSessionServer) {
 	s.RegisterService(&GoSession_ServiceDesc, srv)
 }
 
-func _GoSession_ServiceMethod_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ServiceMethodRequest)
+func _GoSession_CreateSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GoSessionServer).ServiceMethod(ctx, in)
+		return srv.(GoSessionServer).CreateSession(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/go.session.GoSession/ServiceMethod",
+		FullMethod: "/go.session.GoSession/CreateSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GoSessionServer).ServiceMethod(ctx, req.(*ServiceMethodRequest))
+		return srv.(GoSessionServer).CreateSession(ctx, req.(*CreateSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GoSession_DeleteSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoSessionServer).DeleteSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/go.session.GoSession/DeleteSession",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoSessionServer).DeleteSession(ctx, req.(*DeleteSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GoSession_FlushSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlushSessionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoSessionServer).FlushSessions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/go.session.GoSession/FlushSessions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoSessionServer).FlushSessions(ctx, req.(*FlushSessionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GoSession_ExtractSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExtractSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoSessionServer).ExtractSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/go.session.GoSession/ExtractSession",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoSessionServer).ExtractSession(ctx, req.(*ExtractSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,8 +192,20 @@ var GoSession_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*GoSessionServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ServiceMethod",
-			Handler:    _GoSession_ServiceMethod_Handler,
+			MethodName: "CreateSession",
+			Handler:    _GoSession_CreateSession_Handler,
+		},
+		{
+			MethodName: "DeleteSession",
+			Handler:    _GoSession_DeleteSession_Handler,
+		},
+		{
+			MethodName: "FlushSessions",
+			Handler:    _GoSession_FlushSessions_Handler,
+		},
+		{
+			MethodName: "ExtractSession",
+			Handler:    _GoSession_ExtractSession_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

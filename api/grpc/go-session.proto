@@ -4,13 +4,42 @@ package go.session;
 option go_package = "github.com/papireio/go-session-service/pkg/api/grpc";
 
 service GoSession {
-    rpc ServiceMethod(ServiceMethodRequest) returns (ServiceMethodResponse) {}
+    rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {}
+    rpc DeleteSession(DeleteSessionRequest) returns (DeleteSessionResponse) {}
+    rpc FlushSessions(FlushSessionsRequest) returns (FlushSessionsResponse) {}
+    rpc ExtractSession(ExtractSessionRequest) returns (ExtractSessionResponse) {}
 }
 
-message ServiceMethodRequest {
-    string message = 1;
+message CreateSessionRequest {
+    string session_token = 1;
+    string uuid = 2;
 }
 
-message ServiceMethodResponse {
-    string message = 1;
+message CreateSessionResponse {
+    bool success = 1;
+}
+
+message DeleteSessionRequest {
+    string session_token = 1;
+}
+
+message DeleteSessionResponse {
+    bool success = 1;
+}
+
+message FlushSessionsRequest {
+    repeated string session_tokens = 1;
+}
+
+message FlushSessionsResponse {
+    bool success = 1;
+}
+
+message ExtractSessionRequest {
+    string session_token = 1;
+}
+
+message ExtractSessionResponse {
+    string uuid = 1;
+    bool success = 2;
 }
