@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	proto "github.com/isalikov/goservice/pkg/api/grpc"
+	proto "github.com/papireio/go-session-service/pkg/api/grpc"
 	"google.golang.org/grpc"
 	"net"
 )
@@ -12,7 +12,7 @@ type clients struct {
 }
 
 type instance struct {
-	proto.UnimplementedGoServiceServer
+	proto.UnimplementedGoSessionServer
 	clients *clients
 }
 
@@ -29,7 +29,7 @@ func Serve(port int) error {
 	srv := &instance{clients: &clients{}}
 
 	grpcServer := grpc.NewServer()
-	proto.RegisterGoServiceServer(grpcServer, srv)
+	proto.RegisterGoSessionServer(grpcServer, srv)
 
 	return grpcServer.Serve(l)
 }

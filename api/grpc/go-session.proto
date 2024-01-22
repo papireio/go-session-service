@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package go.service;
-option go_package = "github.com/isalikov/goservice/pkg/service";
+package go.session;
+option go_package = "github.com/papireio/go-session-service/pkg/api/grpc";
 
-service GoService {
+service GoSession {
     rpc ServiceMethod(ServiceMethodRequest) returns (ServiceMethodResponse) {}
 }
 

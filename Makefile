@@ -1,6 +1,6 @@
 V := @
 
-NAME := goservice
+NAME := go-session
 OUT_DIR := ./target
 
 MAIN_OUT := $(OUT_DIR)/$(NAME)

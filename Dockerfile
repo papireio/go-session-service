@@ -5,9 +5,9 @@ COPY . .
 RUN make vendor \
     && make build \
     && mkdir -p /usr/app \
-    && cp ./target/goservice /usr/app
+    && cp ./target/go-session /usr/app
 
 WORKDIR /usr/app
 RUN rm -rf /usr/src
 
-CMD ["./goservice"]
+CMD ["./go-session"]

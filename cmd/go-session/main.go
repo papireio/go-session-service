@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/isalikov/goservice/internal/env"
-	"github.com/isalikov/goservice/internal/server"
+	"github.com/papireio/go-session-service/internal/env"
+	"github.com/papireio/go-session-service/internal/server"
 	"github.com/sethvargo/go-envconfig"
 	"log"
 )

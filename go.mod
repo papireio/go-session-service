@@ -1,4 +1,4 @@
-module github.com/isalikov/goservice
+module github.com/papireio/go-session-service
 
 go 1.21
 
